@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unir Conceptos - Reforma Protestante</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('https://i.imgur.com/MfQDbrT.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            padding: 20px;
+        }
+        .container {
+            width: 70%;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .terms, .definitions {
+            display: inline-block;
+            width: 45%;
+            text-align: left;
+        }
+        .term, .definition {
+            padding: 10px;
+            margin: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .selected {
+            background-color: #0288d1;
+            color: white;
+        }
+        button {
+            margin-top: 20px;
+            padding: 14px 28px;
+            font-size: 20px;
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #01579b;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Unir Conceptos - Reforma Protestante</h1>
+        <div class="terms" id="terms"></div>
+        <div class="definitions" id="definitions"></div>
+        <button onclick="checkAnswers()">Comprobar respuestas</button>
+        <p id="result"></p>
+    </div>
+    <script>
+        const pairs = [
+            { term: "Martín Lutero", definition: "Rechazó la venta de indulgencias y escribió 95 tesis en 1517." },
+            { term: "Calvinismo", definition: "Doctrina basada en la predestinación, promovida por Juan Calvino." },
+            { term: "Anglicanismo", definition: "Surge en Inglaterra cuando Enrique VIII rompe con el papa en 1534." },
+            { term: "Concilio de Trento", definition: "Reunión entre 1545 y 1563 que definió la doctrina católica contra el protestantismo." },
+            { term: "Compañía de Jesús", definition: "Orden religiosa fundada por Ignacio de Loyola en 1540 para reforzar la fe católica." },
+            { term: "Nepotismo", definition: "Práctica de conceder cargos eclesiásticos a familiares." },
+            { term: "Simónía", definition: "Venta de cargos eclesiásticos y de indulgencias." },
+            { term: "Justificación por la fe", definition: "Principio luterano según el cual la salvación se obtiene solo por la fe." },
+            { term: "Predestinación", definition: "Creencia de que el destino de cada persona está determinado por Dios." },
+            { term: "Reforma Protestante", definition: "Movimiento iniciado en el siglo XVI que desafió la autoridad de la Iglesia católica." }
+        ];
+
+        let selectedTerm = null;
+        let selectedDefinition = null;
+        let matches = {};
+
+        function renderItems() {
+            const termsContainer = document.getElementById("terms");
+            const definitionsContainer = document.getElementById("definitions");
+            termsContainer.innerHTML = "";
+            definitionsContainer.innerHTML = "";
+
+            const shuffledTerms = [...pairs].sort(() => Math.random() - 0.5);
+            const shuffledDefinitions = [...pairs].sort(() => Math.random() - 0.5);
+
+            shuffledTerms.forEach(pair => {
+                let termDiv = document.createElement("div");
+                termDiv.classList.add("term");
+                termDiv.textContent = pair.term;
+                termDiv.onclick = () => selectItem(termDiv, "term");
+                termsContainer.appendChild(termDiv);
+            });
+
+            shuffledDefinitions.forEach(pair => {
+                let defDiv = document.createElement("div");
+                defDiv.classList.add("definition");
+                defDiv.textContent = pair.definition;
+                defDiv.onclick = () => selectItem(defDiv, "definition");
+                definitionsContainer.appendChild(defDiv);
+            });
+        }
+
+        function selectItem(element, type) {
+            if (type === "term") {
+                if (selectedTerm) selectedTerm.classList.remove("selected");
+                selectedTerm = element;
+            } else {
+                if (selectedDefinition) selectedDefinition.classList.remove("selected");
+                selectedDefinition = element;
+            }
+            element.classList.add("selected");
+
+            if (selectedTerm && selectedDefinition) {
+                matches[selectedTerm.textContent] = selectedDefinition.textContent;
+                selectedTerm.classList.add("matched");
+                selectedDefinition.classList.add("matched");
+                selectedTerm.onclick = null;
+                selectedDefinition.onclick = null;
+                selectedTerm = null;
+                selectedDefinition = null;
+            }
+        }
+
+        function checkAnswers() {
+            let correct = 0;
+            let incorrect = 0;
+            pairs.forEach(pair => {
+                if (matches[pair.term] === pair.definition) {
+                    correct++;
+                } else {
+                    incorrect++;
+                }
+            });
+            document.getElementById("result").textContent = `Aciertos: ${correct}, Errores: ${incorrect}`;
+        }
+
+        renderItems();
+    </script>
+</body>
+</html>
