@@ -8,7 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background: url('https://i.imgur.com/MfQDbrT.jpeg') no-repeat center center fixed;
+            background: url('https://i.imgur.com/v3IBkDr.jpeg') no-repeat center center fixed;
             background-size: cover;
             padding: 20px;
         }
@@ -36,6 +36,10 @@
         .selected {
             background-color: #0288d1;
             color: white;
+        }
+        .matched {
+            color: white;
+            font-weight: bold;
         }
         button {
             margin-top: 20px;
@@ -84,6 +88,8 @@
         let selectedTerm = null;
         let selectedDefinition = null;
         let matches = {};
+        let matchIndex = 0;
+        const colors = ["#ff5733", "#33ff57", "#3357ff", "#ff33a8", "#ffa533", "#57ff33", "#33a8ff", "#a833ff", "#ff3333", "#33ffa5"];
 
         function renderItems() {
             const termsContainer = document.getElementById("terms");
@@ -123,12 +129,16 @@
 
             if (selectedTerm && selectedDefinition) {
                 matches[selectedTerm.textContent] = selectedDefinition.textContent;
+                let color = colors[matchIndex % colors.length];
+                selectedTerm.style.backgroundColor = color;
+                selectedDefinition.style.backgroundColor = color;
                 selectedTerm.classList.add("matched");
                 selectedDefinition.classList.add("matched");
                 selectedTerm.onclick = null;
                 selectedDefinition.onclick = null;
                 selectedTerm = null;
                 selectedDefinition = null;
+                matchIndex++;
             }
         }
 
@@ -144,6 +154,12 @@
             });
             document.getElementById("result").textContent = `Aciertos: ${correct}, Errores: ${incorrect}`;
         }
+
+        renderItems();
+    </script>
+</body>
+</html>
+
 
         renderItems();
     </script>
